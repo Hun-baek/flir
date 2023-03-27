@@ -1,5 +1,5 @@
 """Functions for formatting results."""
 
-from flir.final.plot import plot_regression_by_age
+from flir.final.plot import plot_estimated_function
 
-__all__ = [plot_regression_by_age]
+__all__ = [plot_estimated_function]

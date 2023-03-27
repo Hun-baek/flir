@@ -1,42 +1,45 @@
 """Tasks running the results formatting (tables, figures)."""
 
 import pandas as pd
+import numpy as np
+import pickle
 import pytask
 
-from flir.analysis.model import load_model
-from flir.config import BLD, GROUPS, SRC
-from flir.final import plot_regression_by_age
-from flir.utilities import read_yaml
+from flir.config import BLD, BASIS
+from flir.final.plot import plot_estimated_function
 
-for group in GROUPS:
+for basis in BASIS:
 
     kwargs = {
-        "group": group,
-        "depends_on": {"predictions": BLD / "python" / "predictions" / f"{group}.csv"},
-        "produces": BLD / "python" / "figures" / f"smoking_by_{group}.png",
+        "basis": basis,
+        "produces": BLD / "figures" / f"{basis}_estimation.png",
     }
 
+    @pytask.mark.wip
     @pytask.mark.depends_on(
         {
-            "data_info": SRC / "data_management" / "data_info.yaml",
-            "data": BLD / "python" / "data" / "data_clean.csv",
+            "none": BLD / "analysis" / f"{basis}_none.pkl",
+            "secondD": BLD / "analysis" / f"{basis}_constraint.pkl",
+            "harmonic": BLD / "analysis" / f"{basis}_harmonic.pkl",
         },
     )
-    @pytask.mark.task(id=group, kwargs=kwargs)
-    def task_plot_results_by_age_python(depends_on, group, produces):
-        """Plot the regression results by age (Python version)."""
-        data_info = read_yaml(depends_on["data_info"])
-        data = pd.read_csv(depends_on["data"])
-        predictions = pd.read_csv(depends_on["predictions"])
-        fig = plot_regression_by_age(data, data_info, predictions, group)
+    @pytask.mark.task(id=basis, kwargs=kwargs)
+    def task_plot_estimation(depends_on, basis, produces):
+        with open(depends_on["none"], "rb") as f:
+            data_none = pickle.load(f)
+        with open(depends_on["secondD"], "rb") as f:
+            data_secondD = pickle.load(f)
+        with open(depends_on["harmonic"], "rb") as f:
+            data_harmonic = pickle.load(f)
+
+        dict_varphi = {
+            f"{basis}": data_none["varphi"],
+            f"{basis}_constraint": data_secondD["varphi"],
+            f"{basis}_harmonic": data_harmonic["varphi"],
+            "grid": np.linspace(0, 23, 101),
+        }
+
+        data = pd.DataFrame(dict_varphi)
+
+        fig = plot_estimated_function(data, basis)
         fig.write_image(produces)
-
-
-@pytask.mark.depends_on(BLD / "python" / "models" / "model.pickle")
-@pytask.mark.produces(BLD / "python" / "tables" / "estimation_results.tex")
-def task_create_results_table_python(depends_on, produces):
-    """Store a table in LaTeX format with the estimation results (Python version)."""
-    model = load_model(depends_on)
-    table = model.summary().as_latex()
-    with open(produces, "w") as f:
-        f.writelines(table)

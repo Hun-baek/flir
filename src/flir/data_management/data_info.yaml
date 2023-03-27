@@ -1,23 +1,24 @@
 ---
-data_name: data.csv
 
-columns_to_drop:
-  - nationality
-  - ethnicity
-  - region
-  - amt_weekends
-  - amt_weekdays
-  - type
-  - gross_income
+summer_time_days:
+  - 2016-03-27
+  - 2016-10-30
+  - 2017-03-26
+  - 2017-10-29
+  - 2018-03-25
+  - 2018-10-28
+  - 2019-03-31
+  - 2019-10-27
+  - 2020-03-29
+  - 2020-10-25
+  - 2021-03-28
+  - 2021-10-31
 
-categorical_columns:
-  - gender
-  - marital_status
-  - highest_qualification
-  - smoke
+LBMP_columns:
+  - Eastern Date Hour
+  - Zone Name
+  - DAM Zonal LBMP
 
-column_rename_mapping:
-  highest_qualification: qualification
-
-outcome: smoke
-outcome_numerical: smoke_numerical  # created during the clean_data step
+generation_types:
+  - Wind
+  - Hydro
