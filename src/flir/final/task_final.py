@@ -5,7 +5,7 @@ import numpy as np
 import pickle
 import pytask
 
-from flir.config import BLD, BASIS
+from flir.config import BLD, BASIS, PAPER_DIR
 from flir.final.plot import plot_estimated_function
 
 for basis in BASIS:
@@ -43,3 +43,12 @@ for basis in BASIS:
 
         fig = plot_estimated_function(data, basis)
         fig.write_image(produces)
+
+
+@pytask.mark.wip
+@pytask.mark.latex(
+    script=PAPER_DIR / "flir.tex",
+    document=PAPER_DIR / "flir.pdf",
+)
+def task_compile_latex_docuemnt():
+    pass
