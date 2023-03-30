@@ -78,6 +78,6 @@ def plot_hourly(data, value_name, produces):
     data = data.melt(id_vars=["Hour"], value_name=value_name)
 
     fig, ax = plt.subplots(figsize=(8, 5))
-    seaborn.boxplot(x=data["Hour"], y=data[value_name], ax=ax)
+    seaborn.boxplot(x=data["Hour"], y=data[value_name], showfliers=False, ax=ax)
 
     plt.savefig(produces)
