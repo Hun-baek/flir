@@ -7,5 +7,6 @@ PAPER_DIR = SRC.joinpath("..", "..", "paper").resolve()
 
 BASIS = ["bspline", "fourier"]
 GROUP = ["LBMP", "wind"]
+CONSTRAINT = ["none", "second_derivative", "harmonic"]
 
-__all__ = ["BLD", "SRC", "TEST_DIR", "BASIS", "GROUP"]
+__all__ = ["BLD", "SRC", "TEST_DIR", "BASIS", "GROUP", "CONSTRAINT"]

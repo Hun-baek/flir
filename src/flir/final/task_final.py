@@ -5,8 +5,8 @@ import numpy as np
 import pickle
 import pytask
 
-from flir.config import BLD, BASIS, PAPER_DIR, GROUP
-from flir.final.plot import plot_estimated_function, plot_hourly
+from flir.config import BLD, BASIS, PAPER_DIR, GROUP, CONSTRAINT
+from flir.final.plot import plot_estimated_function, plot_hourly, plot_GCV
 
 for basis in BASIS:
 
@@ -42,6 +42,23 @@ for basis in BASIS:
         data = pd.DataFrame(dict_varphi)
 
         fig = plot_estimated_function(data, basis)
+        fig.write_image(produces)
+
+
+for constraint in CONSTRAINT:
+
+    kwargs = {
+        "produces": BLD / "figures" / f"fourier_{constraint}_gcv.png",
+    }
+
+    @pytask.mark.wip
+    @pytask.mark.depends_on({"data": BLD / "analysis" / f"fourier_{constraint}.pkl"})
+    @pytask.mark.task(kwargs=kwargs)
+    def task_plot_gcv(depends_on, produces):
+        with open(depends_on["data"], "rb") as f:
+            data = pickle.load(f)
+
+        fig = plot_GCV(data)
         fig.write_image(produces)
 
 
