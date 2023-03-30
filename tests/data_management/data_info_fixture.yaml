@@ -1,13 +1,24 @@
 ---
-columns_to_drop:
-  - col2
 
-categorical_columns:
-  - col0
-  - col1
+summer_time_days:
+  - 2016-03-27
+  - 2016-10-30
+  - 2017-03-26
+  - 2017-10-29
+  - 2018-03-25
+  - 2018-10-28
+  - 2019-03-31
+  - 2019-10-27
+  - 2020-03-29
+  - 2020-10-25
+  - 2021-03-28
+  - 2021-10-31
 
-column_rename_mapping:
-  col1: column_1
+LBMP_columns:
+  - Eastern Date Hour
+  - Zone Name
+  - DAM Zonal LBMP
 
-outcome: col0
-outcome_numerical: col0_numerical
+generation_types:
+  - Wind
+  - Hydro
