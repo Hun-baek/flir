@@ -100,6 +100,7 @@ def flir(consumption, LBMP, wind, n_basis, basis, constraint):
             basis_obj.derivative(order=3), basis_obj.derivative(order=3), _matrix=True
         )
         penalty = a_part + 2 * b_part + c_part
+
     else:
         penalty = inner_product(basis_obj, basis_obj, _matrix=True)
 
@@ -120,11 +121,11 @@ def flir(consumption, LBMP, wind, n_basis, basis, constraint):
     r_exp = BasisSmoother(basis_obj).fit_transform(FDataGrid(r, hours))
     r_smt = r_exp.data_matrix
 
-    log_xi_vec = np.arange(-8, 3, 0.0025)
+    log_xi_vec = np.arange(-8, 1, 0.025)
     n_xi = len(log_xi_vec)
     r_smt = np.squeeze(r_smt)
 
-    log_xi_vec = np.arange(-8, 3.0025, 0.0025)
+    log_xi_vec = np.arange(-8, 1.025, 0.025)
     n_xi = len(log_xi_vec)
 
     gcv_vec = []

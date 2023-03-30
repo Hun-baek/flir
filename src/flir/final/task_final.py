@@ -19,7 +19,7 @@ for basis in BASIS:
     @pytask.mark.depends_on(
         {
             "none": BLD / "analysis" / f"{basis}_none.pkl",
-            "secondD": BLD / "analysis" / f"{basis}_constraint.pkl",
+            "secondD": BLD / "analysis" / f"{basis}_second_derivative.pkl",
             "harmonic": BLD / "analysis" / f"{basis}_harmonic.pkl",
         },
     )
