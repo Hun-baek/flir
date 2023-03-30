@@ -15,7 +15,6 @@ for basis in BASIS:
         "produces": BLD / "analysis" / f"{basis}_none.pkl",
     }
 
-    @pytask.mark.wip
     @pytask.mark.depends_on(
         {
             "consumption": BLD / "data" / "consumption_cleaned.csv",
@@ -41,7 +40,6 @@ for basis in BASIS:
         "produces": BLD / "analysis" / f"{basis}_second_derivative.pkl",
     }
 
-    @pytask.mark.wip
     @pytask.mark.depends_on(
         {
             "consumption": BLD / "data" / "consumption_cleaned.csv",
@@ -67,7 +65,6 @@ for basis in BASIS:
         "produces": BLD / "analysis" / f"{basis}_harmonic.pkl",
     }
 
-    @pytask.mark.wip
     @pytask.mark.depends_on(
         {
             "consumption": BLD / "data" / "consumption_cleaned.csv",

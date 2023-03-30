@@ -91,12 +91,19 @@ repos:
     rev: v2.2.2
     hooks:
       - id: codespell
+        exclude: >
+          (?x)^(
+          .*\.csv|
+          .*\.bib|
+          )$
         args:
           - --skip="**.ipynb"
+
   - repo: https://github.com/asottile/setup-cfg-fmt
     rev: v2.2.0
     hooks:
       - id: setup-cfg-fmt
+
 
 ci:
   autoupdate_schedule: monthly

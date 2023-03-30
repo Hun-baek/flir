@@ -21,20 +21,14 @@
 % submissions.
 
 \usepackage[
-    natbib=true,
-    bibencoding=inputenc,
-    bibstyle=authoryear-ibid,
-    citestyle=authoryear-comp,
-    maxcitenames=3,
-    maxbibnames=10,
-    useprefix=false,
-    sortcites=true,
-    backend=biber
+backend=biber,
+style=authoryear-comp,
+nohashothers=true,
+maxnames=2,
+minnames=1,
+natbib
 ]{biblatex}
-\AtBeginDocument{\toggletrue{blx@useprefix}}
-\AtBeginBibliography{\togglefalse{blx@useprefix}}
-\setlength{\bibitemsep}{1.5ex}
-\addbibresource{../../paper/refs.bib}
+\addbibresource{refs.bib}
 
 \usepackage[unicode=true]{hyperref}
 \hypersetup{
@@ -59,13 +53,11 @@
 
 \begin{document}
 
-\title{FLIR\thanks{Jonghun Baek, University of Bonn. Email: \href{mailto:s6jobaek@uni-bonn.de}{\nolinkurl{s6jobaek [at] uni-bonn [dot] de}}.}}
+\title{Application of Scalar-on-Function Linear Instrumental Regression\thanks{Jonghun Baek, University of Bonn. Email: \href{mailto:s6jobaek@uni-bonn.de}{\nolinkurl{s6jobaek [at] uni-bonn [dot] de}}.}}
 
 \author{Jonghun Baek}
 
 \date{
-    {\bf Preliminary -- please do not quote}
-    \\[1ex]
     \today
 }
 
@@ -73,42 +65,111 @@
 
 
 \begin{abstract}
-    Some abstract here.
+    This project is a final project for the course ``Effective Programming Practices for Economists''. The template of this project is obtained here: \url{https://zenodo.org/record/7780520#.ZCXVPnZBw2w}.
 \end{abstract}
 
 \clearpage
 
 
 \section{Introduction} % (fold)
-\label{sec:introduction}
+This project is therefore engaged in introducing Scalar-on-Function Linear Instrumental Regression (SoFLIR) in my Master's thesis entitled ``Scalar-on-Function Linear Instrumental Regression''. There are several mistakes as well as parts that can be extended especially in the application part which focuses on estimating timely volatile price elasticity in the energy market. As following the purpose of this project, this paper is rather more inclined to suggest how to apply SoFLIR than to show a strict theoretical procedure. Importantly different modifications are that I do not only add a constant term in the data-generating process but also import one more constraint in the Tikhonov regularization term. In the following section, I briefly introduce those numerical aspects to derive estimators, and then, further report the results of the estimation.
 
-If you are using this template, please cite this item from the references:
-\citet{GaudeckerEconProjectTemplates}.
-
-The data set for the example project is taken from
-\url{https://www.stem.org.uk/resources/elibrary/resource/28452/large-datasets-stats4schools}.
-It contains data on smoking habits in the UK, with 1691 observations and 12 variables.
-We consider only 4 of the 12 features for the prediction of the variable
-\texttt{smoking}: \texttt{marital\_status}, \texttt{highest\_qualification},
-\texttt{gender} and \texttt{age}. We model the dependence using a Logistic model. All
-numerical features are included linearly, while categorical features are expanded into
-dummy variables. Figures below illustrate the model predictions over the lifetime. You
-will find one figure and one estimation summary table for each installed programming
-language.
+\section{Numerical Aspect}
+I hereby discuss how to derive the estimator with the application of basis expansion. One way to make the basis expansion trackable is through a basis representation of all curves in the model. The object functional is written as follows:
+\begin{equation*}
+	\left\Vert \frac{1}{n}\sum_{i=1}^{n} \alpha z_i + \frac{1}{n}\sum_{i=1}^{n} \langle x_i, \varphi \rangle z_i - \frac{1}{n} \sum_{i=1}^{n} y_i z_i \right\Vert^2 + \xi_n \lVert \bm{A} \varphi \rVert^2
+\end{equation*}
+where $\alpha$ is the constant term, $x_i$ and $z_i$ are each regressor function and instrumental function, $y_i$ are dependent values, $\varphi$ is the true coefficient function, and $\xi_n$ is the regularization parameter. $\bm{A}$ is an operator in order to import a constraint. This project attempt to use three operators, the identity operator (i.e., no constraint), the second derivative operator $D^2$, and the harmonic operator $H$.
+Let us assume that we expand all of the functions $x_i$, $z_i$, and $\varphi$ by the same basis function system $\{\phi_k\}_{k=1}^{K}$ with the same truncation parameter $K$ as a typical choice. The left procedure is analogously achieved to \citet{Ramsay.2005} and \citet{Goldsmith.2011}. To apply estimators, the next section introduces data.
 
 
+\newpage
+
+\section{Application}
+
+Our empirical model is to make use of daily electricity demand on hourly price data as follows:
+\begin{equation*}
+	\text{log}_{10}y_{\text{day}} = \alpha + \int_{0}^{24}\varphi(t) \text{log}_{10}x_{\text{day}}(t) dt + \epsilon_{\text{day}}
+\end{equation*}
+where $y_{\text{day}}$ is a daily electricity demand, and $x_{\text{day}}(t)$ hold hourly observed prices during a day. The logarithm of wind energy generation data is its instrumental variable. The different part of this model is the constant term, $\alpha$.
+
+\subsection{Data}
+The period of collected data is from 01/01/2016 to 31/12/2021, and both weekends and time change days because of  daylights saving time are excluded. Each sample of the electricity price and wind energy generation data holds hourly observations to be treated as functional data.
+\paragraph{Electricity consumption} U.S. Energy Information Administration (EIA) has reported hourly electric grid monitor by regions and has additionally accounted for daily electricity demand data by aggregating hourly measured load data in \href{www.eia.gov}{www.eia.gov}.
+\paragraph{Electricity prices} Hourly electricity price data is based on the New York Independent System Operator (NYISO), the organization that manages the power grid and the electric marketplace in New York state. They are publicly available and displayed in \href{www.nyiso.com}{www.nyiso.com}. Hourly electricity price is from the day-ahead electricity market of NYISO. Figure \ref{fig:prc} describes averaged hourly LBMP of all samples by boxplots.
+\paragraph{Wind and Hydro Generation Data} NYISO provides real-time energy generation within the state of New York. They were finely measured in KWh every 5 minutes, and therefore I converted the capacity of power only produced by the wind and hydro to hourly data by summing them up. Figure \ref{fig:wind} depicts how averaged hourly energy generation does not vary much over time but is slightly lower during morning hours.
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{../bld/figures/LBMP_hourly.png}
+		\caption{LBMP from NYISO}
+		\label{fig:prc}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{../bld/figures/wind_hourly.png}
+		\caption{Wind and Hydro energy generation data from NYISO}
+		\label{fig:wind}
+	\end{subfigure}
+	\caption{Averaged hourly price and energy generation data by wind and hydro}
+\end{figure}
+
+\subsection{GCV}
+One of the most important parts of SoFLIR is how to select the regularization parameter, $\xi_n$. To derive the best result, this project is meant to tune an optimal regularization parameter $\xi_n$ through GCV. Many researchers consider that GCV is a reasonable method to do so, see, for example, \citet{Ramsay.2005}. However, it also has some drawbacks that should be importantly treated. In Figure \ref{GCV}, the red dash lines are marking the value of log$\xi_n$ satisfying the minimum value of GCV. As they look clear, their neighboring areas are flat, and thus, the GCV functions possibly have several local minimum values. The values of $\xi$ could be seriously fluctuated according to recorded data. This would result in an unstable estimate.
 
 \begin{figure}[H]
+	\centering
+	\begin{subfigure}{.33\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{../bld/figures/fourier_none_gcv.png}
+		\caption{GCV without constraint}
+	\end{subfigure}%
+	\begin{subfigure}{.33\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{../bld/figures/fourier_second_derivative_gcv.png}
+		\caption{GCV with $D^2$}
+	\end{subfigure}
+	\begin{subfigure}{.33\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{../bld/figures/fourier_harmonic_gcv.png}
+		\caption{GCV with $H$}
+	\end{subfigure}
+	\caption{GCV with fourier basis functions}
+	\label{GCV}
+\end{figure}
 
-    \centering
-    \includegraphics[width=0.85\textwidth]{../bld/figures/fourier_estimation.png}
+As a result, SoFLIR needs more trustworthy methods to derive an optimal $\xi$.
 
-    \caption{\emph{Python:} Model predictions of the smoking probability over the
-        lifetime. Each colored line represents a case where marital status is fixed to one
-        of the values present in the data set.}
-    \label{fig:python-predictions}
+\subsection{Results}
+Figure \ref{bspline_estimation} represents estimated coefficient functions by B-spline basis functions with either non-constraint or a constraint. The most important weakness of B-spline basis is that it sometimes barely tracks the periodic movement of targeted functions. It does not fully make sense that the elasticity completely changes between 23 o'clock of a day and 0 o'clock tomorrow of the day.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{../bld/figures/bspline_estimation.png}
+
+	\caption{Estimated coefficient functions by B-spline basis functions}
+	\label{bspline_estimation}
 
 \end{figure}
+
+The periodical trait is fully preserved when the basis function is fourier basis function because of the nature of trigonometric functions as Figure \ref{fourier_estimation} represents.
+\begin{figure}[H]
+
+	\centering
+	\includegraphics[width=1\textwidth]{../bld/figures/fourier_estimation.png}
+
+	\caption{Estimated coefficient functions by fourier basis functions}
+	\label{fourier_estimation}
+
+\end{figure}
+The trends of functions are very similar to the one of \citet{Knaut.2016}. The vertical interval of the coefficient functions becomes narrowed down compared to the original results of my Master's thesis due to the constant term. However, it still holds positive values that are exceedingly uncommon in price elasticity. It motivates the necessity of numerical developments making it possible that the estimator holds control variables such as regular multivariate regression models.
+
+\section{Conclusion}
+This project provided a brand-new technique for causal inference in the case where a regressor and an instrument are functions. According to it, the timely volatile price elasticity functions were shown. Moreover, it motivates several research questions to improve the quality of SoFLIR estimators.
+
+
+
 
 
 
@@ -118,7 +179,7 @@ language.
 % section introduction (end)
 
 
-
+\newpage
 \setstretch{1}
 \printbibliography
 \setstretch{1.5}

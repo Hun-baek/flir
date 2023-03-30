@@ -15,7 +15,6 @@ for basis in BASIS:
         "produces": BLD / "figures" / f"{basis}_estimation.png",
     }
 
-    @pytask.mark.wip
     @pytask.mark.depends_on(
         {
             "none": BLD / "analysis" / f"{basis}_none.pkl",
@@ -51,7 +50,6 @@ for constraint in CONSTRAINT:
         "produces": BLD / "figures" / f"fourier_{constraint}_gcv.png",
     }
 
-    @pytask.mark.wip
     @pytask.mark.depends_on({"data": BLD / "analysis" / f"fourier_{constraint}.pkl"})
     @pytask.mark.task(kwargs=kwargs)
     def task_plot_gcv(depends_on, produces):
@@ -69,7 +67,6 @@ for group in GROUP:
         "produces": BLD / "figures" / f"{group}_hourly.png",
     }
 
-    @pytask.mark.wip
     @pytask.mark.depends_on(
         {
             "data": BLD / "data" / f"{group}_cleaned.csv",
@@ -82,7 +79,6 @@ for group in GROUP:
         plot_hourly(data, group, produces)
 
 
-@pytask.mark.wip
 @pytask.mark.latex(
     script=PAPER_DIR / "flir.tex",
     document=PAPER_DIR / "flir.pdf",

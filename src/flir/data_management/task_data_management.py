@@ -11,7 +11,6 @@ from flir.data_management.clean_data import (
 from flir.utilities import read_yaml
 
 
-@pytask.mark.wip
 @pytask.mark.depends_on({"data_info": SRC / "data_management" / "data_info.yaml"})
 @pytask.mark.produces(
     {
