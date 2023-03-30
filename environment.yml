@@ -1,6 +1,7 @@
 ---
 name: flir
 channels:
+  - anaconda
   - conda-forge
   - defaults
 dependencies:
@@ -22,12 +23,12 @@ dependencies:
   - brotli-bin=1.0.9=hcfcfb64_8
   - brotlipy=0.7.0=py39ha55989b_1005
   - bzip2=1.0.8=h8ffe710_4
-  - ca-certificates=2022.12.7=h5b45459_0
+  - ca-certificates=2023.01.10=haa95532_0
   - cachecontrol=0.12.11=pyhd8ed1ab_1
   - cachecontrol-with-filecache=0.12.11=pyhd8ed1ab_1
   - cachy=0.3.0=pyhd8ed1ab_1
   - cairo=1.16.0=hd694305_1014
-  - certifi=2022.12.7=pyhd8ed1ab_0
+  - certifi=2022.12.7=py39haa95532_0
   - cffi=1.15.1=py39h68f70e3_3
   - cfgv=3.3.1=pyhd8ed1ab_0
   - charset-normalizer=2.1.1=pyhd8ed1ab_0
@@ -240,6 +241,7 @@ dependencies:
   - scikit-fda=0.8.1=pyhd8ed1ab_0
   - scikit-learn=1.2.2=py39hb6325b5_1
   - scipy=1.10.1=py39hfbf2dce_0
+  - seaborn=0.12.2=py39haa95532_0
   - send2trash=1.8.0=pyhd8ed1ab_0
   - setuptools=67.6.0=pyhd8ed1ab_0
   - setuptools-scm=7.1.0=pyhd8ed1ab_0
