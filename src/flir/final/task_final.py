@@ -5,8 +5,8 @@ import numpy as np
 import pickle
 import pytask
 
-from flir.config import BLD, BASIS, PAPER_DIR
-from flir.final.plot import plot_estimated_function
+from flir.config import BLD, BASIS, PAPER_DIR, GROUP
+from flir.final.plot import plot_estimated_function, plot_hourly
 
 for basis in BASIS:
 
@@ -43,6 +43,26 @@ for basis in BASIS:
 
         fig = plot_estimated_function(data, basis)
         fig.write_image(produces)
+
+
+for group in GROUP:
+
+    kwargs = {
+        "group": group,
+        "produces": BLD / "figures" / f"{group}_hourly.png",
+    }
+
+    @pytask.mark.wip
+    @pytask.mark.depends_on(
+        {
+            "data": BLD / "data" / f"{group}_cleaned.csv",
+        },
+    )
+    @pytask.mark.task(id=group, kwargs=kwargs)
+    def task_plot_hourly(depends_on, group, produces):
+        data = pd.read_csv(depends_on["data"])
+
+        plot_hourly(data, group, produces)
 
 
 @pytask.mark.wip

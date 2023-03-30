@@ -1,6 +1,8 @@
 """Functions plotting results."""
 
 import plotly.express as px
+import matplotlib.pyplot as plt
+import seaborn
 
 
 def plot_estimated_function(data, basis_type):
@@ -47,3 +49,35 @@ def plot_estimated_function(data, basis_type):
     )
 
     return fig
+
+
+def plot_hourly(data, value_name, produces):
+    """Plot of hourly recorded generation and LBMP.
+
+    Parameters
+    ----------
+    data : pandas DataFrame
+        LBMP data or electricity generation data
+    value_name : str
+        either Generation or LBMP
+    produces: str
+        path for save
+
+    Returns
+    -------
+
+    """
+
+    data = data.drop("Date", axis=1)
+    data.dropna(inplace=True)
+    data = data.T
+    data.reset_index(drop=False, inplace=True)
+    data["index"] = list(range(24))
+    data.rename(columns={"index": "Hour"}, inplace=True)
+
+    data = data.melt(id_vars=["Hour"], value_name=value_name)
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    seaborn.boxplot(x=data["Hour"], y=data[value_name], ax=ax)
+
+    plt.savefig(produces)

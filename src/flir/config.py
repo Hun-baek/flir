@@ -6,5 +6,6 @@ BLD = SRC.joinpath("..", "..", "bld").resolve()
 PAPER_DIR = SRC.joinpath("..", "..", "paper").resolve()
 
 BASIS = ["bspline", "fourier"]
+GROUP = ["LBMP", "wind"]
 
-__all__ = ["BLD", "SRC", "TEST_DIR", "BASIS"]
+__all__ = ["BLD", "SRC", "TEST_DIR", "BASIS", "GROUP"]
