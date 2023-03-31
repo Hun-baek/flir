@@ -32,4 +32,4 @@ $ pytask
 
 If you run ```$ pytask```, all outputs will be created from the code chunks and data in /src and stored into /bld except for the paper.
 The paper will be generated into /paper.
-If you run ```$ pytest```, it will test functions in \test.
+If you run ```$ pytest```, it will test functions in /test.
