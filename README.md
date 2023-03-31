@@ -15,17 +15,26 @@ and the [econ-project-templates](https://github.com/OpenSourceEconomics/econ-pro
 
 * Python 3.9.16
 
-To get started, first clone this repositary.
-
-Navigate to the repositary folder.
-
-Create and activate the environment with
+To get started,
+1. Clone this repositary.
 ```console
-$ conda env create -f "environment.yml"
-$ conda activate flir
+$ git clone -b [tag_name] [repositary_url]
+```
+For example,
+```console
+$ git clone -b epp-final-project https://github.com/Hun-baek/flir.git
 ```
 
-To build the project, type
+2. Navigate to the repositary folder.
+
+3. Create and activate the environment with
+
+```console
+$ conda env create -f "environment.yml"
+$ conda activate flir 
+```
+
+4. To build the project, type
 
 ```console
 $ pytask
