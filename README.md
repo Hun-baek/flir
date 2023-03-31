@@ -15,8 +15,11 @@ and the [econ-project-templates](https://github.com/OpenSourceEconomics/econ-pro
 
 * Python 3.9.16
 
-To get started, create and activate the environment with
+To get started, first clone this repositary.
 
+Navigate to the repositary folder.
+
+Create and activate the environment with
 ```console
 $ conda env create -f "environment.yml"
 $ conda activate flir
