@@ -305,3 +305,6 @@ dependencies:
   - zstd=1.5.2=h12be248_6
   - pip:
       - kaleido==0.2.1
+      - -e .
+
+prefix: C:\Users\Hun\anaconda3\envs\flir
