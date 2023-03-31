@@ -3,8 +3,9 @@ from pathlib import Path
 
 SRC = Path(__file__).parent.resolve()
 BLD = SRC.joinpath("..", "..", "bld").resolve()
+
 PAPER_DIR = SRC.joinpath("..", "..", "paper").resolve()
-TEST_DIR = SRC.joinpath("..", "..", "test").resolve
+TEST_DIR = SRC.joinpath("..", "..", "tests").resolve()
 
 BASIS = ["bspline", "fourier"]
 GROUP = ["LBMP", "wind"]

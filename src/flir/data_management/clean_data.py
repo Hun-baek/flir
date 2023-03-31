@@ -85,7 +85,7 @@ def clean_LBMP(LBMP_path, data_info):
         data = data[~data["Date"].isin(summer_time_days)]
 
         data.reset_index(inplace=True, drop=True)
-        data = data.groupby(["Date", "Time"], as_index=False).mean()
+        data = data.groupby(["Date", "Time"], as_index=False).mean(numeric_only=True)
 
         a = data.groupby(["Date", "Time"]).sum()
 
@@ -131,7 +131,7 @@ def clean_source(source_path, data_info):
         data["Time Stamp"] = pd.to_datetime(data["Time Stamp"]).dt.strftime(
             "%m/%d/%Y %H",
         )
-        data = data.groupby(["Time Stamp"], as_index=False).sum()
+        data = data.groupby(["Time Stamp"], as_index=False).sum(numeric_only=True)
 
         df = pd.concat([df, data])
 

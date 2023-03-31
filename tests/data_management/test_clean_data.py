@@ -7,17 +7,17 @@ from flir.utilities import read_yaml
 
 @pytest.fixture()
 def consumption_path():
-    return TEST_DIR / "data_management" / "consumption_mock.csv"
+    return TEST_DIR / "data_management" / "consumption_mock"
 
 
 @pytest.fixture()
 def LBMP_path():
-    return TEST_DIR / "data_management" / "LBMP_mock.csv"
+    return TEST_DIR / "data_management" / "LBMP_mock"
 
 
 @pytest.fixture()
 def wind_path():
-    return TEST_DIR / "data_management" / "wind_mock.csv"
+    return TEST_DIR / "data_management" / "wind_mock"
 
 
 @pytest.fixture()
@@ -25,7 +25,7 @@ def data_info():
     return read_yaml(TEST_DIR / "data_management" / "data_info_fixture.yaml")
 
 
-def test_do_not_contain_summertimechange(
+def test_do_not_contain_summertimechangedays(
     consumption_path, LBMP_path, wind_path, data_info
 ):
     consumption_clean = clean_consumption(consumption_path, data_info)
