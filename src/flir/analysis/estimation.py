@@ -12,7 +12,7 @@ from skfda.representation.grid import FDataGrid
 from skfda.preprocessing.smoothing import BasisSmoother
 
 
-def flir(consumption, LBMP, wind, n_basis, basis, constraint):
+def flir(consumption, LBMP, wind, n_basis, basis, constraint, logarithm=True):
     """Estimate volatile price elasticity in energy market.
 
     Args:
@@ -22,7 +22,7 @@ def flir(consumption, LBMP, wind, n_basis, basis, constraint):
     - n_basis: int, number of basis functions
     - basis: str, choose either "bspline" or "fourier" basis functions
     - constraint: boolean, use constraint or not
-
+    - logarithm: str, in the case where it does not need to import logarithm
     Returns:
     - varphi: array of estimated coefficient function
     - df: Pandas DataFrame of values of GCV and its corresponding regularization value
@@ -40,12 +40,18 @@ def flir(consumption, LBMP, wind, n_basis, basis, constraint):
 
     # Grids
     hours = np.arange(0, 24)
-    grid = np.linspace(0, 23, 101)
+    grid = np.linspace(0, 23, 100)
 
-    # Remove the first columns and use logarithm
-    consumption = np.log10(consumption.iloc[:, 1:])
-    LBMP = np.log10(LBMP.iloc[:, 1:])
-    wind = np.log10(wind.iloc[:, 1:])
+    # Remove the first columns and use logarithm if it is about elasticity
+    if logarithm == True:
+        consumption = np.log10(consumption.iloc[:, 1:])
+        LBMP = np.log10(LBMP.iloc[:, 1:])
+        wind = np.log10(wind.iloc[:, 1:])
+
+    elif logarithm == False:
+        consumption = consumption.iloc[:, 1:]
+        LBMP = LBMP.iloc[:, 1:]
+        wind = wind.iloc[:, 1:]
 
     # Rename
     LBMP.columns = hours
@@ -117,7 +123,7 @@ def flir(consumption, LBMP, wind, n_basis, basis, constraint):
     J = np.squeeze(J)
     I = np.eye(24)
 
-    r = np.dot(wind.T, consumption["MWh"]) / n
+    r = np.dot(wind.T, consumption.iloc[:, 0]) / n
     r_exp = BasisSmoother(basis_obj).fit_transform(FDataGrid(r, hours))
     r_smt = r_exp.data_matrix
 

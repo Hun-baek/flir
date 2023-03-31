@@ -35,7 +35,7 @@ for basis in BASIS:
             f"{basis}": data_none["varphi"],
             f"{basis}_constraint": data_secondD["varphi"],
             f"{basis}_harmonic": data_harmonic["varphi"],
-            "grid": np.linspace(0, 23, 101),
+            "grid": np.linspace(0, 23, 100),
         }
 
         data = pd.DataFrame(dict_varphi)
